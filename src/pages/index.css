@@ -1,0 +1,8 @@
+.first-image {
+  background-image: url('../images/fristbkg.png');
+  /* Substitua pelo caminho correto */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Adicione outros estilos conforme necessário */
+}
