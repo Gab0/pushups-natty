@@ -5,8 +5,7 @@ import Image from 'next/image';
 
 function Index(): React.JSX.Element {
   return (
-    <div className='bg-image'>
-      <h1>Exercise Program</h1>
+    <div className='blured'>
       <ExerciseComponent />
     </div>
   );

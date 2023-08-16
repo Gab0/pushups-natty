@@ -52,7 +52,9 @@ const ExerciseComponent: React.FC = () => {
   }, [currentSession]);
 
   return (
-    <div>
+    <div className='trueblured'>
+      <h1>Exercise Program</h1>
+
       <h2>Current Session: {currentSession}</h2>
       <div>
         <div
