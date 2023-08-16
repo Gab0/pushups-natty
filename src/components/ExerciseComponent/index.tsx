@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { pushupContent } from '../../pages/database';
+import { pushupContent } from './database';
 
 
 const ExerciseComponent: React.FC = () => {
