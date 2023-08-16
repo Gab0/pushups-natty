@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 function Index(): React.JSX.Element {
   return (
-    <div className='blured'>
+    <div className='divFather'>
       <ExerciseComponent />
     </div>
   );
