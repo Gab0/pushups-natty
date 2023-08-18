@@ -88,7 +88,7 @@ const ExerciseComponent: React.FC<ExerciseProps> = ({ programs }) => {
 								key={index}
 								className={`${
 									stepStage[index] === 'pink'
-										? 'flex flex-col items-center text-zinc-50 bg-gray-300 rounded-full w-52'
+										? 'flex flex-col items-center text-zinc-50 bg-gray-500 rounded-full w-52'
 										: index === currentStep
 										? 'flex flex-col items-center text-green-500 bg-pink-500 rounded-full w-52'
 										: 'flex flex-col items-center text-zinc-50 bg-transparent w-auto'
