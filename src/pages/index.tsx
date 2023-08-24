@@ -1,5 +1,9 @@
 import React from 'react';
+
 import ExerciseComponent from '../components/ExerciseComponent';
+
+import Cylinder3d from "../components/ActionViewer";
+import { Canvas } from "@react-three/fiber";
 
 function Index(): React.JSX.Element {
 	const programs = {
@@ -72,6 +76,9 @@ function Index(): React.JSX.Element {
 	return (
 		<div className='flex mx-auto backdrop-blur-lg bg-black/30 h-screen w-screen'>
 			<ExerciseComponent programs={programs} />
+			<Canvas>
+				<Cylinder3d position={[-1.2, 0, 0]} />
+			</Canvas>
 		</div>
 	);
 }
