@@ -1,4 +1,6 @@
 // database.ts
+//
+import exerciseDatabase from "../../pages/api/routines.json";
 
 interface ProgramSeed {
 	name: string;
