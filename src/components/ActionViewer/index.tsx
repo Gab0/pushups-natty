@@ -29,7 +29,7 @@ type GLTFResult = GLTF & {
   }
 }
 
-const MascotModel = (props: {}) => {
+const MascotModel = ((props: {}) => {
   // This reference gives us direct access to the THREE.Mesh object
   const groupRef = useRef<Group>(null!);
   // Hold state for hovered and clicked events
@@ -77,7 +77,7 @@ const MascotModel = (props: {}) => {
     </mesh>
     </group>
   );
-})
+});
  
 useGLTF.preload(model_address);
 
