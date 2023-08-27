@@ -1,9 +1,11 @@
-import React from 'react';
-
+import React from "react";
 import ExerciseComponent from '../components/ExerciseComponent';
 
 import MascotModel from "../components/ActionViewer";
 import { Canvas } from "@react-three/fiber";
+
+import store from '../app/store';
+import { Provider } from 'react-redux';
 
 function Index(): React.JSX.Element {
 	const programs = {
@@ -73,12 +75,15 @@ function Index(): React.JSX.Element {
 			},
 		],
 	};
+
 	return (
 		<div className='flex mx-auto backdrop-blur-lg bg-black/30 h-screen w-screen'>
+			<Provider store={store}>
 			<ExerciseComponent programs={programs} />
 			<Canvas>
 				<MascotModel />
 			</Canvas>
+			</Provider>
 		</div>
 	);
 }

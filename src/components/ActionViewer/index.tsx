@@ -1,10 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, forwardRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { Group } from 'three';
 
+import { useSelector, useDispatch } from 'react-redux';
+
 const model_address = "/fitness_figure.glb";
+
+type ModelProps = {
+  active: boolean
+}
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -23,16 +29,23 @@ type GLTFResult = GLTF & {
   }
 }
 
-export default function MascotModel(props: {}) {
+const MascotModel = (props: {}) => {
   // This reference gives us direct access to the THREE.Mesh object
-  const ref = useRef();
   const groupRef = useRef<Group>(null!);
   // Hold state for hovered and clicked events
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
   // Subscribe this component to the render-loop, rotate the mesh every frame
   //useFrame((state, delta) => (ref.current.rotation.x += 0.01));
+  //
+  //
+  const active = useSelector((state: any) => state.currentAction.active);
 
+  useFrame(() => {
+    if (active) {
+      groupRef.current.rotation.y += 0.03;
+    }
+  });
   const { nodes, materials } = useGLTF(model_address) as GLTFResult;
 
   console.log(materials);
@@ -64,6 +77,8 @@ export default function MascotModel(props: {}) {
     </mesh>
     </group>
   );
-}
+})
  
 useGLTF.preload(model_address);
+
+export default MascotModel;

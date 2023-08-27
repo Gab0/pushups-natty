@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
+import { useDispatch } from 'react-redux';
+
+import { setActive } from '../../app/currentAction'
+
 interface ExerciseProgram {
 	name: string;
 	steps: string[];
@@ -10,6 +14,7 @@ interface ExerciseProps {
 		pushups: ExerciseProgram[];
 		situps: ExerciseProgram[];
 	};
+
 }
 
 const ExerciseComponent: React.FC<ExerciseProps> = ({ programs }) => {
@@ -24,9 +29,12 @@ const ExerciseComponent: React.FC<ExerciseProps> = ({ programs }) => {
 		setCurrentSession(0); // Reset session when changing program
 	};
 
+	const dispatch = useDispatch();
+
 	const setSession = useCallback(
 		(session: number) => {
 			setCurrentSession(session);
+
 			const program = programs[currentProgram as keyof typeof programs]?.[session];
 			if (program) {
 				setSteps(program.steps);
@@ -49,6 +57,9 @@ const ExerciseComponent: React.FC<ExerciseProps> = ({ programs }) => {
 			}
 			setStepStage(updatedStages);
 			setCurrentStep(currentStep + 1);
+
+			// Update the activity switch;
+			dispatch(setActive(currentStep % 2 === 1));
 		} else {
 			setSession(currentSession + 1);
 		}
