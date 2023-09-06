@@ -1,8 +1,9 @@
-import React, { useRef, useState, forwardRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { Group } from 'three';
+import * as THREE from 'three';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -13,68 +14,48 @@ type ModelProps = {
 }
 
 type GLTFResult = GLTF & {
-  nodes: {
-    Plane003: THREE.Mesh;
-    Plane003_1: THREE.Mesh;
-    Plane003_2: THREE.Mesh;
-    Plane003_3: THREE.Mesh;
-    Plane003_4: THREE.Mesh;
-  }
-  materials: {
-    Body: THREE.MeshStandardMaterial;
-    Pupil: THREE.MeshStandardMaterial;
-    Eye: THREE.MeshStandardMaterial;
-    Shorts: THREE.MeshStandardMaterial;
-    Hair: THREE.MeshStandardMaterial;
-  }
+
+  animations: THREE.AnimationClip[];
+
+  scene: Group;
+
 }
 
 const MascotModel = ((props: {}) => {
-  // This reference gives us direct access to the THREE.Mesh object
+
   const groupRef = useRef<Group>(null!);
-  // Hold state for hovered and clicked events
-  const [hovered, hover] = useState(false);
-  const [clicked, click] = useState(false);
-  // Subscribe this component to the render-loop, rotate the mesh every frame
-  //useFrame((state, delta) => (ref.current.rotation.x += 0.01));
-  //
-  //
+
   const active = useSelector((state: any) => state.currentAction.active);
 
-  useFrame(() => {
-    if (active) {
-      groupRef.current.rotation.y += 0.03;
-    }
-  });
-  const { nodes, materials } = useGLTF(model_address) as GLTFResult;
+  const GLTF = useGLTF(model_address) as any;
 
-  console.log(materials);
-  // Return the view, these are regular Threejs elements expressed in JSX
-  //
+  GLTF.scene.children = [GLTF.scene.children[0]];
+
+  let mixer: THREE.AnimationMixer = new THREE.AnimationMixer(GLTF.scene);
+
+  useFrame(() => {
+    let delta = 0.003;
+    if (active) { delta = 0.01; }
+      groupRef.current.rotation.y += delta;
+      mixer.update(delta);
+  });
+
+  useEffect(() => {
+    if (GLTF.animations.length) {
+      if (active) {
+        mixer.clipAction(GLTF.animations[1]).play();
+      } else{
+        mixer.clipAction(GLTF.animations[0]).play();
+      }
+    };
+  });
+
   return (
     <group ref={groupRef} dispose={null}>
+
+      <primitive object={GLTF.scene} />
       <ambientLight />
-      <mesh rotation={[0, 10, 0]}>
-        <boxGeometry attach="geometry" args={[1, 1, 1]} />
-        <meshStandardMaterial attach="material" color={"#6be092"} />
-      </mesh>
-    <mesh castShadow receiveShadow {...props} geometry={nodes.Plane003.geometry} material={materials["Body"]}/>
-    <mesh castShadow receiveShadow {...props} geometry={nodes.Plane003_1.geometry} material={materials["Pupil"]}/>
-    <mesh castShadow receiveShadow {...props} geometry={nodes.Plane003_2.geometry} material={materials["Eye"]}/>
-    <mesh castShadow receiveShadow {...props} geometry={nodes.Plane003_3.geometry} material={materials["Shorts"]}/>
-    <mesh castShadow receiveShadow {...props} geometry={nodes.Plane003_4.geometry} material={materials["Hair"]}/>
-    <mesh
-      {...props}
-      scale={clicked ? 1.5 : 1}
-      onClick={(event) => click(!clicked)}
-      onPointerOver={(event) => hover(true)}
-      onPointerOut={(event) => hover(false)}
-    >
-      <cylinderGeometry args={[1, 1, 0.5]} />
-      <meshStandardMaterial
-        color={hovered ? "hotpink" : "orange"}
-      />
-    </mesh>
+
     </group>
   );
 });
